@@ -1,33 +1,22 @@
-import { getBestsellers, getAllProducts } from '@/lib/products'
+import { getBestsellers } from '@/lib/products'
 import HeroSection from '@/components/home/HeroSection'
 import TrustBadges from '@/components/home/TrustBadges'
+import CategoryTiles from '@/components/home/CategoryTiles'
 import BestsellerSection from '@/components/home/BestsellerSection'
-import BundleSection from '@/components/home/BundleSection'
-import GallerySection from '@/components/home/GallerySection'
+import RoomVisualizerTeaser from '@/components/home/RoomVisualizerTeaser'
 import ExpertSection from '@/components/home/ExpertSection'
-import RoomSection from '@/components/home/RoomSection'
-import BrandsSection from '@/components/home/BrandsSection'
-import DualBanners from '@/components/home/DualBanners'
-import TrustStrip from '@/components/home/TrustStrip'
-import UspStrip from '@/components/home/UspStrip'
 
 export default function HomePage() {
-  const bestsellers = getBestsellers(5)
-  const allProducts = getAllProducts()
+  const bestsellers = getBestsellers(10)
 
   return (
     <main>
       <HeroSection />
-      <UspStrip />
       <TrustBadges />
+      <CategoryTiles />
       <BestsellerSection products={bestsellers} />
-      <BundleSection />
-      <GallerySection products={allProducts.slice(0, 8)} />
+      <RoomVisualizerTeaser />
       <ExpertSection />
-      <RoomSection />
-      <BrandsSection />
-      <DualBanners />
-      <TrustStrip />
     </main>
   )
 }

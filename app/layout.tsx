@@ -1,34 +1,35 @@
-import type { Metadata } from 'next'
-import { IBM_Plex_Sans } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Navigation from '@/components/layout/Navigation'
-import Ticker from '@/components/layout/Ticker'
+import UrgencyBar from '@/components/layout/UrgencyBar'
 import Footer from '@/components/layout/Footer'
 import CartDrawer from '@/components/cart/CartDrawer'
+import ExpertChatButton from '@/components/layout/ExpertChatButton'
 
-const ibm = IBM_Plex_Sans({
-  weight: ['300','400','500','600','700'],
-  subsets: ['latin'],
-  variable: '--font-ibm',
-})
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
 
 export const metadata: Metadata = {
-  title: 'Bodenfachhandel Hamburg — Premium Designböden',
-  description: '277 Enia-Designböden vom Hamburger Fachhandel. Gratis Muster, Express-Lieferung, 60 Tage Rückgabe. PayPal · Klarna · Visa.',
-  keywords: 'Bodenbelag, Designboden, Vinylboden, Enia, Hamburg, Fachhandel',
+  title: 'Enia Bodenbelag Hamburg — Premium Designböden direkt vom Fachhandel',
+  description: '277 Enia-Designböden vom Hamburger Fachhandel. Gratis Muster, 24h-Versand, 60 Tage Rückgabe. Eiche, Beton, Stein, Großformat.',
+  keywords: 'Enia, Bodenbelag, Designboden, Vinylboden, Hamburg, Fachhandel, Eichenboden, Betonoptik',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
-      <body className={`${ibm.variable} font-sans`}>
-        <Ticker />
+      <body>
+        <UrgencyBar />
         <Header />
         <Navigation />
         {children}
         <Footer />
         <CartDrawer />
+        <ExpertChatButton />
       </body>
     </html>
   )

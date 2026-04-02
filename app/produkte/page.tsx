@@ -30,77 +30,113 @@ function ProdukteContent() {
   }, [filters, sort, allProducts])
 
   return (
-    <div className="flex gap-0 min-h-screen">
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       {/* FILTER SIDEBAR */}
-      <aside className="w-[260px] flex-shrink-0 border-r p-5 sticky top-[130px] h-fit" style={{ borderColor: 'var(--border)' }}>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-black text-base">Filter</h3>
-          <button onClick={() => setFilters({ koll: '', maxPrice: 200, search: '' })} className="text-xs font-semibold" style={{ color: 'var(--red)' }}>Zurücksetzen</button>
+      <aside style={{
+        width: '260px',
+        flexShrink: 0,
+        borderRight: '1px solid var(--border)',
+        padding: '24px 20px',
+        position: 'sticky',
+        top: '160px',
+        height: 'fit-content',
+        background: 'white',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h3 style={{ fontWeight: 800, fontSize: '15px', color: 'var(--primary)' }}>Filter</h3>
+          <button
+            onClick={() => setFilters({ koll: '', maxPrice: 200, search: '' })}
+            style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', minHeight: 'auto' }}
+          >
+            Zurücksetzen
+          </button>
         </div>
 
-        <div className="mb-5">
-          <div className="text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'var(--muted)' }}>Kollektion</div>
+        {/* Kollektion filter */}
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--muted)', marginBottom: '10px' }}>
+            Kollektion
+          </div>
           {kollektionen.slice(0, 12).map(k => (
-            <label key={k} className="flex items-center gap-2 py-1 cursor-pointer text-sm hover:text-[var(--red)] transition-colors">
+            <label key={k} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '5px 0', cursor: 'pointer', fontSize: '13.5px' }}>
               <input
                 type="checkbox"
                 checked={filters.koll === k}
                 onChange={e => setFilters(f => ({ ...f, koll: e.target.checked ? k : '' }))}
-                className="accent-[var(--red)]"
+                style={{ accentColor: 'var(--primary)' }}
               />
               {k}
             </label>
           ))}
         </div>
 
-        <div className="mb-5">
-          <div className="text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'var(--muted)' }}>Preis bis</div>
+        {/* Price filter */}
+        <div>
+          <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--muted)', marginBottom: '10px' }}>
+            Preis bis
+          </div>
           <input
             type="range" min={67} max={200} value={filters.maxPrice}
             onChange={e => setFilters(f => ({ ...f, maxPrice: +e.target.value }))}
-            className="w-full accent-[var(--red)]"
+            style={{ width: '100%', accentColor: 'var(--primary)' } as React.CSSProperties}
           />
-          <div className="flex justify-between text-xs mt-1" style={{ color: 'var(--muted)' }}>
-            <span>67 €</span><span className="font-bold" style={{ color: 'var(--dark)' }}>bis {filters.maxPrice} €</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginTop: '4px', color: 'var(--muted)' }}>
+            <span>67 €</span>
+            <span style={{ fontWeight: 700, color: 'var(--text)' }}>bis {filters.maxPrice} €</span>
           </div>
-        </div>
-
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'var(--muted)' }}>Eignung</div>
-          {['Fußbodenheizung','Feuchtraum','Büro/Gewerbe','Haustiere'].map(e => (
-            <label key={e} className="flex items-center gap-2 py-1 cursor-pointer text-sm hover:text-[var(--red)] transition-colors">
-              <input type="checkbox" className="accent-[var(--red)]" />
-              {e}
-            </label>
-          ))}
         </div>
       </aside>
 
       {/* PRODUCT GRID */}
-      <div className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-sm" style={{ color: 'var(--muted)' }}>
-            <span className="font-bold text-base" style={{ color: 'var(--dark)' }}>{filtered.length}</span> Produkte gefunden
+      <div style={{ flex: 1, padding: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ fontSize: '14px', color: 'var(--muted)' }}>
+            <span style={{ fontWeight: 800, fontSize: '18px', color: 'var(--primary)' }}>{filtered.length}</span> Produkte gefunden
           </div>
-          <select value={sort} onChange={e => setSort(e.target.value)} className="px-3 py-2 rounded-lg text-sm border-[1.5px] outline-none" style={{ borderColor: 'var(--border)' }}>
+          <select
+            value={sort}
+            onChange={e => setSort(e.target.value)}
+            style={{
+              padding: '10px 16px',
+              borderRadius: '8px',
+              fontSize: '13.5px',
+              border: '1.5px solid var(--border)',
+              outline: 'none',
+              color: 'var(--text)',
+              background: 'white',
+              minHeight: '44px',
+            }}
+          >
             <option value="popular">Beliebtheit</option>
             <option value="price-asc">Preis aufsteigend</option>
             <option value="price-desc">Preis absteigend</option>
           </select>
         </div>
-        <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '18px',
+        }}
+        className="product-grid-4"
+        >
           {filtered.map((p, i) => (
             <ProductCard key={p.id} product={p} delay={i * 0.03} />
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 1100px) { .product-grid-4 { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (max-width: 768px) { .product-grid-4 { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 480px) { .product-grid-4 { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   )
 }
 
 export default function ProdukteSeite() {
   return (
-    <Suspense fallback={<div className="p-10 text-center">Lädt...</div>}>
+    <Suspense fallback={<div style={{ padding: '60px', textAlign: 'center', color: 'var(--muted)' }}>Lädt...</div>}>
       <ProdukteContent />
     </Suspense>
   )

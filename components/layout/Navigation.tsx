@@ -3,50 +3,82 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const navLinks = [
-  { href: '/', label: 'Startseite' },
-  { href: '/produkte?kat=vinyl', label: 'Vinylboden' },
-  { href: '/produkte?kat=designboden', label: 'Designboden' },
-  { href: '/produkte?kat=laminat', label: 'Laminat' },
-  { href: '/produkte?kat=parkett', label: 'Parkett' },
-  { href: '/produkte?kat=beton', label: 'Betonoptik' },
-  { href: '/produkte?kat=stein', label: 'Steinoptik', isNew: true },
-  { href: '/produkte?kat=zubehoer', label: 'Zubehör' },
-  { href: '/ratgeber', label: 'Ratgeber' },
+  { href: '/produkte', label: 'Alle Kollektionen' },
+  { href: '/produkte?raum=wohnzimmer', label: 'Nach Raum' },
+  { href: '/muster', label: 'Muster bestellen' },
+  { href: '/berater', label: 'Berater' },
+  { href: '/sale', label: '🔥 Sale', highlight: true },
 ]
 
 export default function Navigation() {
   const pathname = usePathname()
 
   return (
-    <nav style={{ background: 'var(--red)' }}>
-      <div className="flex items-center px-10">
+    <nav style={{
+      background: 'var(--white)',
+      borderBottom: '1px solid var(--border)',
+      position: 'sticky',
+      top: '113px',
+      zIndex: 80,
+      boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+    }}>
+      <div style={{
+        maxWidth: '1440px',
+        margin: '0 auto',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 24px',
+        overflowX: 'auto',
+      }}
+      className="no-scrollbar"
+      >
         {navLinks.map(link => (
           <Link
             key={link.href}
             href={link.href}
-            className="relative text-[13.5px] font-medium px-4 py-3 whitespace-nowrap transition-colors border-b-[3px] border-transparent hover:text-white hover:bg-white/10"
             style={{
-              color: pathname === link.href ? 'white' : 'rgba(255,255,255,0.82)',
-              borderBottomColor: pathname === link.href ? 'white' : 'transparent',
+              fontSize: '14px',
+              fontWeight: link.highlight ? 700 : 600,
+              padding: '14px 20px',
+              whiteSpace: 'nowrap',
+              textDecoration: 'none',
+              color: link.highlight
+                ? '#dc2626'
+                : pathname === link.href
+                  ? 'var(--primary)'
+                  : 'var(--text)',
+              borderBottom: pathname === link.href ? '2px solid var(--primary)' : '2px solid transparent',
+              transition: 'color 0.15s, border-color 0.15s',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             {link.label}
-            {link.isNew && (
-              <span className="absolute top-1.5 right-0.5 bg-yellow-400 text-black text-[8px] font-black px-1 rounded">NEU</span>
-            )}
           </Link>
         ))}
-        <div className="flex-1" />
-        <div className="flex items-center border-l border-white/20 pl-4">
-          <Link href="/ueber-uns" className="text-white/65 text-xs px-2.5 py-3 hover:text-white transition-colors">Über uns</Link>
-          <Link href="/filialen" className="text-white/65 text-xs px-2.5 py-3 hover:text-white transition-colors">Filialen</Link>
-        </div>
-        <Link
-          href="/sale"
-          className="text-[13.5px] font-black px-4 py-3 whitespace-nowrap"
-          style={{ color: '#fef08a' }}
-        >
-          🔥 Sale −53%
+        <div style={{ flex: 1 }} />
+        <Link href="/ratgeber" style={{
+          fontSize: '13px',
+          color: 'var(--muted)',
+          padding: '14px 12px',
+          textDecoration: 'none',
+          minHeight: '44px',
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+          Ratgeber
+        </Link>
+        <Link href="/ueber-uns" style={{
+          fontSize: '13px',
+          color: 'var(--muted)',
+          padding: '14px 12px',
+          textDecoration: 'none',
+          minHeight: '44px',
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+          Über uns
         </Link>
       </div>
     </nav>

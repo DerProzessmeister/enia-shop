@@ -1,26 +1,74 @@
 const badges = [
-  { icon: '🌟', score: '4,9', stars: '★★★★★', starColor: 'var(--red)', label: 'Google', count: '847 Bewertungen' },
-  { icon: '🏅', score: '4,85', stars: '★★★★★', starColor: '#f59e0b', label: 'Trusted Shops', count: 'Zertifiziert' },
-  { icon: '⭐', score: '4,9', stars: '★★★★★', starColor: '#00b67a', label: 'Trustpilot', count: '320 Bewertungen' },
-  { icon: '🏪', score: '10+', stars: '', starColor: '', label: 'Jahre Erfahrung', count: 'Hamburg seit 2015' },
+  {
+    icon: '🛡️',
+    title: 'Käuferschutz 4,9★',
+    sub: 'Trusted Shops zertifiziert',
+  },
+  {
+    icon: '🎁',
+    title: 'Gratis Muster',
+    sub: 'Bis zu 5 Muster kostenlos',
+  },
+  {
+    icon: '🚚',
+    title: 'Lieferung in 24h',
+    sub: 'Bestell bis 14 Uhr → heute',
+  },
+  {
+    icon: '↩',
+    title: '60 Tage Rückgabe',
+    sub: 'Kein Risiko, volle Flexibilität',
+  },
 ]
 
 export default function TrustBadges() {
   return (
-    <div className="flex items-center justify-center gap-0 bg-white border-b-2" style={{ borderColor: 'var(--border)' }}>
-      {badges.map((b, i) => (
-        <div key={i} className="flex items-center gap-3 px-8 py-4 border-r last:border-r-0" style={{ borderColor: 'var(--border)' }}>
-          <span className="text-3xl">{b.icon}</span>
-          <div>
-            <div className="text-xl font-black" style={{ color: i === 0 ? 'var(--red)' : 'var(--dark)' }}>{b.score}</div>
-            {b.stars && <div className="text-sm tracking-[-1px]" style={{ color: b.starColor }}>{b.stars}</div>}
+    <section style={{
+      background: 'var(--white)',
+      borderBottom: '1px solid var(--border)',
+    }}>
+      <div style={{
+        maxWidth: '1440px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        borderLeft: '1px solid var(--border)',
+      }}
+      className="trust-grid"
+      >
+        {badges.map((b) => (
+          <div key={b.title} style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            padding: '20px 28px',
+            borderRight: '1px solid var(--border)',
+          }}>
+            <span style={{ fontSize: '32px', flexShrink: 0 }}>{b.icon}</span>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--primary)', lineHeight: 1.3 }}>
+                {b.title}
+              </div>
+              <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '2px' }}>
+                {b.sub}
+              </div>
+            </div>
           </div>
-          <div>
-            <div className="text-sm font-bold">{b.label}</div>
-            <div className="text-xs" style={{ color: 'var(--muted)' }}>{b.count}</div>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .trust-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .trust-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
   )
 }

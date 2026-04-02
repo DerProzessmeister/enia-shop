@@ -1,10 +1,8 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCart } from '@/lib/store'
 import { Product } from '@/lib/types'
-import { formatPrice, calcM2Price } from '@/lib/utils'
-import { useCart, useWishlist } from '@/lib/store'
 
 interface Props {
   product: Product
@@ -14,114 +12,157 @@ interface Props {
 
 export default function ProductCard({ product, rank, delay = 0 }: Props) {
   const { addItem } = useCart()
-  const { toggle, has } = useWishlist()
-  const [added, setAdded] = useState(false)
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    addItem(product)
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1500)
-  }
-
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault()
-    toggle(product)
-  }
-
-  const isWished = has(product.id)
-  const isOnSale = product.id % 3 === 0
-  const isNew = product.id % 7 === 0
+  const displayName = product.name
+    .replace(/^(110% Qualität:|1A)\s*/i, '')
+    .replace(/- Jetzt bestellen!$/i, '')
+    .trim()
 
   return (
-    <Link href={`/produkte/${product.slug}`} className="block group">
-      <div
-        className="bg-white rounded-xl overflow-hidden border transition-all duration-200 cursor-pointer hover:-translate-y-1"
-        style={{ borderColor: 'var(--border)', boxShadow: '0 0 0 rgba(0,0,0,0)' }}
-        onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.13)')}
-        onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 0 0 rgba(0,0,0,0)')}
-        style={{ animationDelay: `${delay}s` }}
-      >
-        {/* IMAGE */}
-        <div className="h-[185px] relative overflow-hidden">
-          {product.image ? (
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 50vw, 20vw"
-            />
-          ) : (
-            <div className="w-full h-full" style={{ background: 'linear-gradient(140deg, #e8d5b7, #c8a070, #a07840)' }} />
-          )}
-          {/* Number badge */}
-          {rank && (
-            <span className="absolute top-2.5 left-2.5 z-10 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black text-white shadow-lg" style={{ background: 'var(--red)' }}>
-              {rank}
+    <div
+      style={{
+        background: 'white',
+        borderRadius: '12px',
+        border: '1px solid var(--border)',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+        animationDelay: `${delay}s`,
+      }}
+      className="product-card animate-fadeup"
+    >
+      {/* Image */}
+      <Link href={`/produkte/${product.slug}`} style={{ display: 'block', position: 'relative', aspectRatio: '1', overflow: 'hidden' }}>
+        <Image
+          src={product.image}
+          alt={displayName}
+          fill
+          style={{ objectFit: 'cover', transition: 'transform 0.3s' }}
+          sizes="(max-width: 640px) 50vw, (max-width: 1200px) 25vw, 20vw"
+          className="card-img"
+        />
+        {/* Badges */}
+        <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {rank && rank <= 3 && (
+            <span style={{
+              background: rank === 1 ? '#f5c842' : rank === 2 ? '#e5e7eb' : '#d97706',
+              color: rank === 1 ? '#1a1a2e' : '#374151',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              fontSize: '10px',
+              fontWeight: 800,
+              display: 'block',
+            }}>
+              #{rank} 🏆
             </span>
           )}
-          {/* Sale/New badge */}
-          {isOnSale && (
-            <span className="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black text-white" style={{ background: 'rgba(239,68,68,0.9)' }}>
-              −15%
+          {product.availability === 'InStock' && (
+            <span style={{
+              background: '#dcfce7',
+              color: '#166534',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              fontSize: '10px',
+              fontWeight: 700,
+              display: 'block',
+            }}>
+              ✓ Auf Lager
             </span>
           )}
-          {isNew && !isOnSale && (
-            <span className="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black text-white" style={{ background: 'rgba(37,99,235,0.9)' }}>
-              NEU
-            </span>
-          )}
-          {/* Wishlist */}
-          <button
-            onClick={handleWishlist}
-            className="absolute bottom-2.5 right-2.5 z-10 w-[30px] h-[30px] rounded-full flex items-center justify-center text-sm shadow-md transition-transform hover:scale-110"
-            style={{ background: 'rgba(255,255,255,0.92)' }}
-          >
-            {isWished ? '❤️' : '♡'}
-          </button>
+        </div>
+      </Link>
+
+      {/* Content */}
+      <div style={{ padding: '14px', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
+          {product.kollektion}
         </div>
 
-        {/* BODY */}
-        <div className="p-3.5">
-          <div className="text-[10px] font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--red)' }}>
-            Enia · {product.kollektion.slice(0,12)}
+        <Link href={`/produkte/${product.slug}`} style={{ textDecoration: 'none', color: 'var(--text)' }}>
+          <div style={{
+            fontSize: '13.5px',
+            fontWeight: 700,
+            lineHeight: 1.35,
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical' as const,
+          }}>
+            {displayName}
           </div>
-          <div className="text-[13.5px] font-bold leading-tight mb-1.5">{product.name}</div>
-          <div className="flex gap-1 mb-2 flex-wrap">
-            {product.groesse && <span className="text-[10.5px] px-1.5 py-0.5 rounded" style={{ background: 'var(--surface)', color: 'var(--muted)' }}>{product.groesse}</span>}
-            {product.nutzschicht && <span className="text-[10.5px] px-1.5 py-0.5 rounded" style={{ background: 'var(--surface)', color: 'var(--muted)' }}>{product.nutzschicht}</span>}
+        </Link>
+
+        {/* Details row */}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {product.nutzschicht && (
+            <span style={{
+              fontSize: '10.5px',
+              background: 'var(--surface)',
+              color: 'var(--muted)',
+              padding: '2px 8px',
+              borderRadius: '4px',
+              fontWeight: 500,
+            }}>
+              {product.nutzschicht}
+            </span>
+          )}
+          {product.groesse && (
+            <span style={{
+              fontSize: '10.5px',
+              background: 'var(--surface)',
+              color: 'var(--muted)',
+              padding: '2px 8px',
+              borderRadius: '4px',
+              fontWeight: 500,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '120px',
+            }}>
+              {product.groesse}
+            </span>
+          )}
+        </div>
+
+        {/* Price & Cart */}
+        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+          <div>
+            <div style={{ fontWeight: 900, fontSize: '18px', color: 'var(--primary)' }}>
+              {product.price.toFixed(2).replace('.', ',')} €
+            </div>
+            <div style={{ fontSize: '10.5px', color: 'var(--muted)' }}>pro Karton</div>
           </div>
-          <div className="flex items-center gap-1 mb-2">
-            <span className="text-[#f59e0b] text-xs">★★★★★</span>
-            <span className="text-[11px]" style={{ color: 'var(--muted)' }}>(48)</span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-black">{formatPrice(product.price)}</span>
-            {isOnSale && <span className="text-[12.5px] line-through" style={{ color: 'var(--muted)' }}>{formatPrice(product.price * 1.18)}</span>}
-          </div>
-          <div className="text-[10.5px] mb-1" style={{ color: 'var(--muted)' }}>pro Karton (2,28 m²)</div>
-          <div className="text-[11px] font-semibold mb-2.5" style={{ color: 'var(--green)' }}>
-            = {calcM2Price(product.price)}/m²
-          </div>
-          <div className="flex gap-1.5">
-            <button
-              onClick={handleAddToCart}
-              className="flex-1 py-2.5 rounded-lg text-[12.5px] font-bold text-white transition-colors"
-              style={{ background: added ? 'var(--green)' : 'var(--red)' }}
-            >
-              {added ? '✓ Hinzugefügt' : 'In den Warenkorb'}
-            </button>
-            <button
-              onClick={e => e.preventDefault()}
-              className="px-3 py-2 rounded-lg text-xs font-bold border-[1.5px] transition-colors hover:bg-red-50"
-              style={{ background: 'var(--red-lt)', color: 'var(--red)', borderColor: '#fca5a5' }}
-            >
-              Muster
-            </button>
-          </div>
+          <button
+            onClick={() => addItem(product)}
+            style={{
+              background: 'var(--primary)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              width: '40px',
+              height: '40px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              transition: 'background 0.15s',
+              minHeight: '44px',
+              minWidth: '44px',
+            }}
+            title="In den Warenkorb"
+          >
+            +
+          </button>
         </div>
       </div>
-    </Link>
+
+      <style>{`
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .product-card:hover .card-img { transform: scale(1.04); }
+      `}</style>
+    </div>
   )
 }

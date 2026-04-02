@@ -1,41 +1,145 @@
+import Link from 'next/link'
+
 export default function ExpertSection() {
   return (
-    <section className="grid items-center gap-12 px-10 py-10" style={{ gridTemplateColumns: '260px 1fr', background: 'var(--dark)' }}>
-      <div className="text-center">
-        <div className="w-44 h-44 rounded-full mx-auto flex items-center justify-center text-6xl border-4" style={{ background: 'linear-gradient(135deg,#8b6530,#d4b896)', borderColor: 'var(--red)' }}>
-          🏗️
+    <section style={{
+      background: 'var(--surface)',
+      padding: '56px 0',
+      borderTop: '1px solid var(--border)',
+      borderBottom: '1px solid var(--border)',
+    }}>
+      <div style={{
+        maxWidth: '1440px',
+        margin: '0 auto',
+        padding: '0 24px',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '64px',
+        alignItems: 'center',
+      }}
+      className="expert-grid"
+      >
+        {/* LEFT — Expert intro */}
+        <div>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#fef9c3',
+            border: '1px solid #fde047',
+            borderRadius: '50px',
+            padding: '5px 14px',
+            fontSize: '12px',
+            fontWeight: 600,
+            color: '#713f12',
+            marginBottom: '20px',
+          }}>
+            👨‍💼 Persönliche Beratung
+          </div>
+
+          <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--primary)', marginBottom: '12px', lineHeight: 1.2 }}>
+            Unser Bodenexperte<br />berät dich persönlich
+          </h2>
+
+          <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+            Du weißt nicht welcher Boden zu deinem Raum passt? Kein Problem — unser Fachberater hilft dir, den perfekten Boden zu finden. Kostenlos, unverbindlich, auf Deutsch.
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <Link href="/berater" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'var(--primary)',
+              color: 'white',
+              textDecoration: 'none',
+              padding: '0 24px',
+              height: '50px',
+              borderRadius: '10px',
+              fontWeight: 700,
+              fontSize: '14px',
+            }}>
+              💬 Kostenlos beraten lassen
+            </Link>
+            <a href="tel:04055633269" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'white',
+              color: 'var(--primary)',
+              textDecoration: 'none',
+              padding: '0 20px',
+              height: '50px',
+              borderRadius: '10px',
+              fontWeight: 700,
+              fontSize: '14px',
+              border: '2px solid var(--primary)',
+            }}>
+              📞 040 55 63 32 69
+            </a>
+          </div>
+
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+            {[
+              { icon: '⏱', text: 'Mo–Fr 8–18 Uhr' },
+              { icon: '🌐', text: 'Auch per WhatsApp' },
+              { icon: '🎁', text: 'Muster auf Anfrage' },
+            ].map(i => (
+              <div key={i.text} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--muted)' }}>
+                <span>{i.icon}</span> {i.text}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="text-xs mt-3 font-semibold" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          Timo Brandt<br />Inhaber & Bodenexperte
-        </div>
-        <button className="mt-3 flex items-center gap-2 mx-auto px-5 py-2.5 rounded-lg font-bold text-[13px] text-white transition-all hover:-translate-y-0.5 border-none cursor-pointer" style={{ background: 'var(--red)' }}>
-          📞 Jetzt beraten lassen
-        </button>
-      </div>
-      <div>
-        <div className="text-[11px] font-bold uppercase tracking-[1.5px] mb-2" style={{ color: 'var(--red)' }}>Warum bei uns kaufen?</div>
-        <h2 className="text-[28px] font-black text-white mb-3 leading-[1.2]">
-          Vom Hamburger<br />Fachmann — nicht vom<br />anonymen Lager
-        </h2>
-        <p className="text-[14.5px] leading-[1.7] mb-5" style={{ color: 'rgba(255,255,255,0.7)' }}>
-          Als zertifizierter Enia-Fachhändler verkaufen wir dir nur das, was wir selbst verlegen würden.
-          Du hast eine Frage beim Verlegen? Ruf an — wir helfen dir, bis der Boden perfekt sitzt.
-          Kein Callcenter, keine Warteschleife. Direkt der Experte.
-        </p>
-        <div className="flex gap-8">
+
+        {/* RIGHT — Process steps */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--primary)', marginBottom: '4px' }}>
+            So einfach geht's:
+          </h3>
           {[
-            { num: '277', label: 'Enia-Produkte' },
-            { num: '10+', label: 'Jahre Erfahrung' },
-            { num: '4,9★', label: 'Kundenbewertung' },
-            { num: '24h', label: 'Lieferung' },
+            { step: '01', title: 'Kostenlose Muster anfragen', desc: 'Bis zu 5 Muster gratis — sieh und fühle den Boden vor dem Kauf.' },
+            { step: '02', title: 'Persönliche Beratung', desc: 'Unser Experte empfiehlt den perfekten Boden für deinen Raum.' },
+            { step: '03', title: 'Bequem bestellen', desc: 'Online bestellen, morgen geliefert. Montage-Hilfe inklusive.' },
           ].map(s => (
-            <div key={s.num} className="text-center">
-              <div className="text-[28px] font-black" style={{ color: 'var(--red)' }}>{s.num}</div>
-              <div className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>{s.label}</div>
+            <div key={s.step} style={{
+              display: 'flex',
+              gap: '16px',
+              alignItems: 'flex-start',
+              background: 'white',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              border: '1px solid var(--border)',
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                background: 'var(--accent)',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 900,
+                fontSize: '12px',
+                color: 'var(--primary)',
+                flexShrink: 0,
+              }}>
+                {s.step}
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '4px' }}>{s.title}</div>
+                <div style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.5 }}>{s.desc}</div>
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .expert-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+        }
+      `}</style>
     </section>
   )
 }

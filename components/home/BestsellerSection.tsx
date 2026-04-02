@@ -4,49 +4,89 @@ import Link from 'next/link'
 import ProductCard from '@/components/shop/ProductCard'
 import { Product } from '@/lib/types'
 
-const FILTER_TABS = ['Alle','Eicheoptik','Betonoptik','Steinoptik','Großformat XXL','Unter 100€','Fußbodenheizung']
+const FILTER_TABS = ['Alle', 'Eicheoptik', 'Betonoptik', 'Steinoptik', 'Großformat XXL', 'Unter 100€']
 
 export default function BestsellerSection({ products }: { products: Product[] }) {
   const [active, setActive] = useState('Alle')
 
   return (
-    <section className="px-10 py-12">
-      <div className="flex justify-between items-baseline mb-5">
-        <h2 className="text-[23px] font-black">🏆 Topseller — Meistgekaufte Böden</h2>
-        <Link href="/produkte" className="text-[13.5px] font-bold" style={{ color: 'var(--red)' }}>Alle 277 Produkte →</Link>
+    <section style={{ padding: '56px 0', background: 'var(--bg)' }}>
+      <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 24px' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--primary)', marginBottom: '6px' }}>
+              🏆 Meistgekaufte Böden
+            </h2>
+            <p style={{ fontSize: '14px', color: 'var(--muted)' }}>Die beliebtesten Enia-Designböden unserer Kunden</p>
+          </div>
+          <Link href="/produkte" style={{
+            color: 'var(--primary)',
+            textDecoration: 'none',
+            fontSize: '14px',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            border: '1.5px solid var(--primary)',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            minHeight: '44px',
+          }}>
+            Alle 277 Produkte →
+          </Link>
+        </div>
+
+        {/* Filter tabs */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
+          {FILTER_TABS.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActive(tab)}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '50px',
+                fontSize: '13px',
+                fontWeight: 600,
+                border: '1.5px solid',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                minHeight: '44px',
+                ...(active === tab
+                  ? { background: 'var(--primary)', color: 'white', borderColor: 'var(--primary)' }
+                  : { background: 'white', color: 'var(--text)', borderColor: 'var(--border)' }),
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Product grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          gap: '20px',
+        }}
+        className="product-grid"
+        >
+          {products.map((p, i) => (
+            <ProductCard key={p.id} product={p} rank={i + 1} delay={i * 0.06} />
+          ))}
+        </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6 items-center">
-        <span className="text-[12.5px] font-semibold mr-1" style={{ color: 'var(--muted)' }}>Filter:</span>
-        {FILTER_TABS.map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActive(tab)}
-            className="px-4 py-[7px] rounded-full text-[12.5px] font-medium border-[1.5px] transition-all cursor-pointer"
-            style={
-              active === tab
-                ? { background: 'var(--red)', color: '#fff', borderColor: 'var(--red)' }
-                : { background: '#fff', color: 'var(--muted)', borderColor: 'var(--border)' }
-            }
-          >
-            {tab}
-          </button>
-        ))}
-        <select className="ml-auto px-3 py-2 rounded-lg text-sm border-[1.5px] outline-none cursor-pointer" style={{ borderColor: 'var(--border)', color: 'var(--dark)' }}>
-          <option>Beliebtheit</option>
-          <option>Preis ↑</option>
-          <option>Preis ↓</option>
-          <option>Neueste</option>
-        </select>
-      </div>
-
-      {/* Product Grid */}
-      <div className="grid gap-[18px]" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
-        {products.map((p, i) => (
-          <ProductCard key={p.id} product={p} rank={i + 1} delay={i * 0.08} />
-        ))}
-      </div>
+      <style>{`
+        @media (max-width: 1200px) {
+          .product-grid { grid-template-columns: repeat(4, 1fr) !important; }
+        }
+        @media (max-width: 900px) {
+          .product-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+        @media (max-width: 640px) {
+          .product-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+      `}</style>
     </section>
   )
 }
