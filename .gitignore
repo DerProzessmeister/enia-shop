@@ -1,0 +1,5 @@
+node_modules/
+.next/
+data/shop.db
+.env.local
+.env
